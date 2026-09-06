@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: iconference
+
+  datasource:
+    username: conference_user
+    password: Conference@2026
+    url: jdbc:mysql://114.215.211.204:3306/intelliconf?characterEncoding=utf-8&zeroDataTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: 114.215.211.204
+      port: 6379
+      password: Jiangxiaolin-0216
+
+# Mail accounts are stored per conference in conference_mail_account.
+# Do not configure a global spring.mail sender here.
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mapper/*.xml
+
+author-discovery:
+  openalex-base-url: https://api.openalex.org
+  crossref-base-url: https://api.crossref.org
+  user-agent: ConferenceAuthorDiscoveryBot
+  contact-email:
+  request-timeout-seconds: 60
+  max-page-bytes: 5242880
+  max-html-bytes: 5242880
+  max-pdf-bytes: 15728640
+  max-discovered-pdf-per-page: 3
+  respect-robots: true
+  robots-failure-policy: SKIP
+  request-interval-ms: 200
+  max-retry: 2
+  max-papers-factor: 5
+  max-total-papers: 500
+  pdf-parse-max-pages: 2

@@ -1,0 +1,21 @@
+CREATE TABLE `conference_mail_account` (
+    `id` bigint NOT NULL AUTO_INCREMENT,
+    `conference_id` bigint NOT NULL COMMENT '会议ID',
+    `provider_type` varchar(32) NOT NULL COMMENT 'SMTP/TENCENT_EXMAIL',
+    `from_email` varchar(150) NOT NULL COMMENT '官方发件邮箱',
+    `from_name` varchar(100) DEFAULT NULL COMMENT '发件显示名',
+    `reply_to` varchar(150) DEFAULT NULL COMMENT '回复邮箱',
+    `smtp_host` varchar(150) NOT NULL COMMENT 'SMTP服务器',
+    `smtp_port` int NOT NULL COMMENT 'SMTP端口',
+    `username` varchar(150) NOT NULL COMMENT '邮箱账号',
+    `password_cipher` text NOT NULL COMMENT '加密后的邮箱密码或客户端专用密码',
+    `ssl_enabled` tinyint(1) DEFAULT 1 COMMENT '是否启用SSL',
+    `starttls_enabled` tinyint(1) DEFAULT 0 COMMENT '是否启用STARTTLS',
+    `enabled` tinyint(1) DEFAULT 1 COMMENT '是否启用',
+    `last_test_status` varchar(32) DEFAULT NULL COMMENT '最近一次测试状态',
+    `last_test_time` datetime DEFAULT NULL COMMENT '最近一次测试时间',
+    `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_conference_mail_account_conf` (`conference_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会议官方邮箱配置';

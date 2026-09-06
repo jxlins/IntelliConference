@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to You under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxl.ai.intelliconf.dao.mapper.ConferenceMapper">
+
+    <!-- 分页查询短链接 -->
+    <select id="pageConference" parameterType="com.jxl.ai.intelliconf.dto.req.ConferencePageRepDTO"
+            resultType="com.jxl.ai.intelliconf.dto.resp.ConferencePageRespDTO">
+        SELECT c.title,
+               c.short_name,
+               c.start_time,
+               c.end_time,
+               c.current_state,
+               c.setup_status,
+               l.province,
+               l.city,
+               l.country,
+               l.address
+        FROM conferences c
+        LEFT JOIN location l ON c.id = l.confer_id
+        WHERE c.create_user = #{createUser} AND c.del_flag = 0
+        ORDER BY c.end_time DESC
+    </select>
+</mapper>

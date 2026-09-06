@@ -1,0 +1,9 @@
+com\jxl\ai\intelliconf\mail\application\ConferenceMailServiceImplTest.class
+com\jxl\ai\intelliconf\mail\infrastructure\TemplateRenderServiceTest.class
+com\jxl\ai\intelliconf\toolkit\MilestoneUtilTest.class
+com\jxl\ai\intelliconf\service\impl\ConferenceTimelineServiceImplTest.class
+com\jxl\ai\intelliconf\mail\provider\MailProviderFactoryTest.class
+com\jxl\ai\intelliconf\author_discovery\AuthorDiscoveryCoreTest.class
+com\jxl\ai\intelliconf\IconferenceApplicationTests.class
+com\jxl\ai\intelliconf\mail\provider\TencentExmailProviderTest.class
+com\jxl\ai\intelliconf\service\impl\DeadlineRuleServiceImplTest.class

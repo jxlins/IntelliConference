@@ -1,0 +1,20 @@
+CREATE TABLE `conf_task_assignment` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `task_instance_id` bigint NOT NULL COMMENT '事务实例ID',
+  `conference_id` bigint NOT NULL COMMENT '会议ID',
+  `assignee_type` varchar(20) NOT NULL COMMENT 'ROLE/USER',
+  `assignee_user_id` varchar(100) DEFAULT NULL,
+  `assignee_user_name` varchar(100) DEFAULT NULL,
+  `assignee_role_code` varchar(100) DEFAULT NULL,
+  `status` varchar(32) NOT NULL DEFAULT 'ASSIGNED',
+  `assigned_by` varchar(100) DEFAULT NULL,
+  `assigned_at` datetime DEFAULT NULL,
+  `accepted_at` datetime DEFAULT NULL,
+  `completed_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_task` (`task_instance_id`),
+  KEY `idx_conf_role` (`conference_id`, `assignee_role_code`),
+  KEY `idx_conf_user` (`conference_id`, `assignee_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会议事务分派';

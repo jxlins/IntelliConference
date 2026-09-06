@@ -1,0 +1,27 @@
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Logs
+*.log
+logs/
+
+# Frontend
+IntelliConfFront/node_modules/
+IntelliConfFront/dist/
+IntelliConfFront/dist-ssr/
+IntelliConfFront/coverage/
+IntelliConfFront/*.tsbuildinfo
+IntelliConfFront/.eslintcache
+
+# Backend build/runtime output
+intelliconf/target/
+intelliconf/.m2/
+intelliconf/uploads/
+
+# Temporary local copies/archives
+backend/
+backend.zip
