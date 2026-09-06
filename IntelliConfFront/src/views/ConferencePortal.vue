@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Calendar, Delete, Location, Plus } from '@element-plus/icons-vue'
+import { Calendar, Delete, EditPen, Location, Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 import http from '../utils/http'
 
@@ -123,6 +123,10 @@ function openCreateDialog() {
   dialogVisible.value = true
 }
 
+function goElectronicSeal() {
+  router.push('/electronic-seal')
+}
+
 function resetForm() {
   formRef.value?.resetFields()
   Object.assign(conferenceForm, {
@@ -223,6 +227,7 @@ onMounted(loadConferences)
         <span>管理会议创建、初始化和执行进度</span>
       </div>
       <div class="header-actions">
+        <el-button :icon="EditPen" size="large" @click="goElectronicSeal">电子印章</el-button>
         <el-button :icon="Plus" type="primary" size="large" @click="openCreateDialog">创建会议</el-button>
         <el-button size="large" @click="logout">退出登录</el-button>
       </div>

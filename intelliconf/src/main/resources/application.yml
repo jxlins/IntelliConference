@@ -9,6 +9,11 @@ spring:
   application:
     name: iconference
 
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 30MB
+
   datasource:
     username: conference_user
     password: Conference@2026

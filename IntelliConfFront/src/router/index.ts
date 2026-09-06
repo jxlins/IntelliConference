@@ -82,6 +82,12 @@ const router = createRouter({
       name: 'ConferenceMailAccount',
       component: ConferenceMailAccountView,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/electronic-seal',
+      name: 'ElectronicSeal',
+      component: () => import('../views/ElectronicSealView.vue'),
+      meta: { requiresAuth: true }
     }
   ]
 })

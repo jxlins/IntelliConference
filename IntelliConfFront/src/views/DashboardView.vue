@@ -628,6 +628,7 @@ onBeforeUnmount(() => { clearInterval(clockTimer) })
           <el-button :icon="Setting">更多</el-button>
           <template #dropdown><el-dropdown-menu>
             <el-dropdown-item :icon="EditPen" @click="goInfo">会议信息</el-dropdown-item>
+            <el-dropdown-item :icon="EditPen" @click="router.push('/electronic-seal')">电子印章</el-dropdown-item>
             <el-dropdown-item :icon="Message" @click="goMailAccount">会议邮箱</el-dropdown-item>
             <el-dropdown-item :icon="ChatLineRound" @click="goMailCompose">临时邮件</el-dropdown-item>
             <el-dropdown-item divided :icon="User" @click="logout">退出登录</el-dropdown-item>
