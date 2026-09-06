@@ -1,0 +1,74 @@
+server:
+  port: 8080
+
+web:
+  # Production example: https://conference.example.org
+  base-url: ${INTELLICONF_WEB_BASE_URL:http://localhost:5173}
+
+spring:
+  application:
+    name: iconference
+
+  datasource:
+    username: conference_user
+    password: Conference@2026
+    url: jdbc:mysql://114.215.211.204:3306/intelliconf?characterEncoding=utf-8&zeroDataTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: 114.215.211.204
+      port: 6379
+      password: Jiangxiaolin-0216
+
+# Mail accounts are stored per conference in conference_mail_account.
+# Do not configure a global spring.mail sender here.
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mapper/*.xml
+
+author-discovery:
+  openalex-base-url: https://api.openalex.org
+  crossref-base-url: https://api.crossref.org
+  user-agent: ConferenceAuthorDiscoveryBot
+  contact-email:
+  request-timeout-seconds: 12
+  max-page-bytes: 5242880
+  max-html-bytes: 5242880
+  # PDF 上限降到 8MB：大文件解析慢且易卡死解析线程
+  max-pdf-bytes: 8388608
+  max-discovered-pdf-per-page: 3
+  respect-robots: true
+  robots-failure-policy: SKIP
+  request-interval-ms: 200
+  max-retry: 2
+  api-key: ${OPENALEX_API_KEY:}
+  max-papers-factor: 30
+  max-total-papers: 6000
+  pdf-parse-max-pages: 3
+  # Semantic Scholar 无 Key 时约 100 次/5 分钟且易被 429；建议申请免费 Key 后配置
+  semantic-scholar-api-key: ${SEMANTIC_SCHOLAR_API_KEY:}
+  semantic-scholar-enabled: true
+  # 邮箱核验并发与抓取预算（网络慢时调低超时、调高并发）
+  email-extraction-workers: 12
+  extraction-timeout-seconds: 8
+  robots-timeout-seconds: 5
+  # 主机熔断：连续失败达到次数后跳过该主机（应对 arXiv 等本地不可达站点）
+  host-failure-threshold: 3
+  max-papers-per-candidate: 4
+  max-urls-per-paper: 4
+  job-deadline-minutes: 180
+
+# DeepSeek API（用于自动邮件内容生成）
+# 申请地址：https://platform.deepseek.com → API Keys
+# 未配置 api-key 或调用失败时自动降级到内置文案，不影响邮件生成链路
+deepseek:
+  enabled: ${DEEPSEEK_ENABLED:true}
+  api-key: ${DEEPSEEK_API_KEY:}
+  base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+  model: ${DEEPSEEK_MODEL:deepseek-chat}
+  timeout-seconds: 30
+  max-tokens: 1024
+  temperature: 0.7

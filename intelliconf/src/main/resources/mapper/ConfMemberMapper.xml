@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jxl.ai.intelliconf.dao.mapper.ConfMemberMapper">
+
+    <!--
+        根据会议ID和角色，跨表查询收件人信息。
+        DISTINCT 防止同一人在 conf_member 中存在多条记录（如同时担任多角色时的数据冗余）。
+    -->
+    <select id="selectParticipantsByRole"
+            resultType="com.jxl.ai.intelliconf.dto.resp.ContactDTO">
+        SELECT DISTINCT
+            cp.id,
+            cp.name,
+            cp.email,
+            cp.institution
+        FROM conf_contact_pool cp
+                 INNER JOIN conf_member cm ON cp.id = cm.contact_id
+        WHERE cm.conf_id = #{confId}
+          AND cm.role = #{role}
+    </select>
+
+</mapper>

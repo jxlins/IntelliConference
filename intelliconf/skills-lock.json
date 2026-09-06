@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "academic-search": {
+      "source": "ustc-ai4science/academic-search",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "10c4e822436f89fc8494eeb10d785b1d73695ae8c15e9a6a4b910dc197997e20"
+    }
+  }
+}
