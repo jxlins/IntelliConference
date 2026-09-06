@@ -93,7 +93,6 @@ async function loadConferences() {
       params: {
         current: currentPage.value,
         size: pageSize.value,
-        createUser: localStorage.getItem('username'),
       },
     })
     if (isSuccess(response.data)) {
