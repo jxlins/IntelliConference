@@ -4,10 +4,11 @@ import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import http from '../utils/http'
+import { conferenceLocation, getConferenceId } from '../router/navigation'
 
 const route = useRoute()
 const router = useRouter()
-const confId = computed(() => String(route.query.confId || ''))
+const confId = computed(() => getConferenceId(route.query))
 const loading = ref(false)
 const saving = ref(false)
 const formRef = ref<FormInstance>()
@@ -125,7 +126,7 @@ async function saveConference() {
 }
 
 function goBack() {
-  router.push(`/dashboard?confId=${encodeURIComponent(confId.value)}`)
+  router.push(conferenceLocation('Dashboard', confId.value))
 }
 
 onMounted(loadConferenceDetail)

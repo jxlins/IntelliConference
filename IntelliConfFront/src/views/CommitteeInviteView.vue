@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
 import http from '../utils/http'
+import { conferenceLocation } from '../router/navigation'
 
 interface InviteTokenInfo {
   conferenceId: number
@@ -74,7 +75,7 @@ async function acceptInvite() {
     ElMessage.success('已接受邀请，您已正式加入会议委员会')
     const data = response.data.data as InviteTokenInfo
     if (data?.conferenceShortName) {
-      router.push(`/dashboard?confId=${encodeURIComponent(data.conferenceShortName)}`)
+      router.push(conferenceLocation('Dashboard', data.conferenceShortName))
       return
     }
     router.push('/portal')

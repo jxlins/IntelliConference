@@ -3,6 +3,7 @@ import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import http from '../utils/http'
+import { conferenceLocation, getConferenceId } from '../router/navigation'
 
 interface Candidate { id: string; authorName: string; email?: string; organization?: string; countryRegion?: string; overallScore: number; reviewStatus: string; sourceUrl?: string; representativePapers?: string }
 interface Job { jobId: string; status: string; totalPapers: number; totalCandidates: number; highConfidenceEmails: number; errorMessage?: string }
@@ -112,7 +113,7 @@ onBeforeUnmount(() => { disposed = true; clearTimeout(timer) })
 <template>
   <main class="discovery-page" v-loading="loading">
     <header>
-      <el-button @click="router.push({ path: '/dashboard', query: { confId: route.query.confId } })">返回会议工作台</el-button>
+      <el-button @click="router.push(conferenceLocation('Dashboard', getConferenceId(route.query)))">返回会议工作台</el-button>
       <h1>潜在投稿者发现</h1>
       <p>{{ title }}</p>
     </header>

@@ -10,11 +10,15 @@ import ConferenceSetupWizardView from '../views/ConferenceSetupWizardView.vue'
 import ConferenceUserManagementView from '../views/ConferenceUserManagementView.vue'
 import CommitteeInviteView from '../views/CommitteeInviteView.vue'
 import MailWorkflowView from '../views/MailWorkflowView.vue'
+import { getConferenceId, safeRedirectTarget } from './navigation'
+
+const authenticated = { requiresAuth: true }
+const conferenceScoped = { requiresAuth: true, requiresConference: true, conferenceNav: true }
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/author-discovery', name: 'AuthorDiscovery', component: () => import('../views/AuthorDiscoveryView.vue'), meta: { requiresAuth: true } },
+    { path: '/author-discovery', name: 'AuthorDiscovery', component: () => import('../views/AuthorDiscoveryView.vue'), meta: conferenceScoped },
     {
       path: '/',
       redirect: '/auth'
@@ -28,43 +32,43 @@ const router = createRouter({
       path: '/portal',
       name: 'Portal',
       component: ConferencePortal,
-      meta: { requiresAuth: true }
+      meta: authenticated
     },
     {
       path: '/dashboard',
       name: 'Dashboard',
       component: DashboardView,
-      meta: { requiresAuth: true }
+      meta: conferenceScoped
     },
     {
       path: '/mail-compose',
       name: 'MailCompose',
       component: MailComposeView,
-      meta: { requiresAuth: true }
+      meta: conferenceScoped
     },
     {
       path: '/conference-info',
       name: 'ConferenceInfo',
       component: ConferenceInfoView,
-      meta: { requiresAuth: true }
+      meta: conferenceScoped
     },
     {
       path: '/conference-setup',
       name: 'ConferenceSetup',
       component: ConferenceSetupWizardView,
-      meta: { requiresAuth: true }
+      meta: conferenceScoped
     },
     {
       path: '/conference-committee-init',
       name: 'ConferenceCommitteeInit',
       component: ConferenceCommitteeInitView,
-      meta: { requiresAuth: true }
+      meta: conferenceScoped
     },
     {
       path: '/mail-workflow',
       name: 'MailWorkflow',
       component: MailWorkflowView,
-      meta: { requiresAuth: true }
+      meta: conferenceScoped
     },
     {
       path: '/committee-invite',
@@ -75,33 +79,39 @@ const router = createRouter({
       path: '/conference-users',
       name: 'ConferenceUsers',
       component: ConferenceUserManagementView,
-      meta: { requiresAuth: true }
+      meta: conferenceScoped
     },
     {
       path: '/conference-mail-account',
       name: 'ConferenceMailAccount',
       component: ConferenceMailAccountView,
-      meta: { requiresAuth: true }
+      meta: conferenceScoped
     },
     {
       path: '/electronic-seal',
       name: 'ElectronicSeal',
       component: () => import('../views/ElectronicSealView.vue'),
-      meta: { requiresAuth: true }
-    }
+      meta: { requiresAuth: true, conferenceNav: true }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: () => localStorage.getItem('token') ? { name: 'Portal' } : { name: 'Auth' },
+    },
   ]
 })
 
 // 简单的路由守卫（检查登录状态）
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   const token = localStorage.getItem('token')
   
   if (to.meta.requiresAuth && !token) {
-    // 需要登录但未登录，跳转到登录页
-    next('/auth')
+    // 登录后恢复用户原本要进入的页面，会议上下文不会丢失。
+    next({ name: 'Auth', query: { redirect: to.fullPath } })
   } else if (to.path === '/auth' && token) {
-    // 已登录访问登录页，跳转到会议门户
-    next('/portal')
+    next(safeRedirectTarget(to.query.redirect) || { name: 'Portal' })
+  } else if (to.meta.requiresConference && !getConferenceId(to.query)) {
+    // 会议内页面必须带会议标识，避免进入一个加载不出数据的空页面。
+    next({ name: 'Portal' })
   } else {
     next()
   }

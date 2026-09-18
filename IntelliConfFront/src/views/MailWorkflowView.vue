@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft, CircleCheck, Clock, EditPen, Message, Promotion, Refresh } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import http from '../utils/http'
+import { conferenceLocation, getConferenceId } from '../router/navigation'
 
 interface Milestone {
   id: number
@@ -52,7 +53,7 @@ interface MailTask {
 
 const route = useRoute()
 const router = useRouter()
-const confKey = computed(() => String(route.query.confId || ''))
+const confKey = computed(() => getConferenceId(route.query))
 const conferenceId = ref<number | null>(null)
 const conferenceTitle = ref('')
 const conferenceShortName = ref('')
@@ -464,15 +465,15 @@ async function regenerateMail() {
 }
 
 function goBack() {
-  router.push(`/dashboard?confId=${encodeURIComponent(confKey.value)}`)
+  router.push(conferenceLocation('Dashboard', confKey.value))
 }
 
 function goCompose() {
-  router.push(`/mail-compose?confId=${encodeURIComponent(confKey.value)}`)
+  router.push(conferenceLocation('MailCompose', confKey.value))
 }
 
 function goAccount() {
-  router.push(`/conference-mail-account?confId=${encodeURIComponent(confKey.value)}`)
+  router.push(conferenceLocation('ConferenceMailAccount', confKey.value))
 }
 
 onMounted(loadPage)

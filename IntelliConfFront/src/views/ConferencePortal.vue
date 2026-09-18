@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { Calendar, Delete, EditPen, Location, Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 import http from '../utils/http'
+import { conferenceLocation } from '../router/navigation'
 
 interface Conference {
   shortName: string
@@ -113,10 +114,10 @@ function enterConference(conf: Conference) {
   const setupGuided = localStorage.getItem(`${setupGuidePrefix}${conf.shortName}`) === '1'
   if (conf.setupStatus !== 'TASK_GENERATED' && !setupGuided) {
     localStorage.setItem(`${setupGuidePrefix}${conf.shortName}`, '1')
-    router.push(`/conference-setup?confId=${encodeURIComponent(conf.shortName)}`)
+    router.push(conferenceLocation('ConferenceSetup', conf.shortName))
     return
   }
-  router.push(`/dashboard?confId=${encodeURIComponent(conf.shortName)}`)
+  router.push(conferenceLocation('Dashboard', conf.shortName))
 }
 
 function openCreateDialog() {
@@ -165,7 +166,7 @@ async function submitConference() {
         const shortName = conferenceForm.shortName.trim()
         localStorage.setItem(`${setupGuidePrefix}${shortName}`, '1')
         await loadConferences()
-        router.push(`/conference-setup?confId=${encodeURIComponent(shortName)}`)
+        router.push(conferenceLocation('ConferenceSetup', shortName))
         return
       }
       ElMessage.error(response.data?.message || '创建会议失败')

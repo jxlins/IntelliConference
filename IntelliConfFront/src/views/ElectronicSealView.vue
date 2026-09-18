@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft, Download, Picture, UploadFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import http from '../utils/http'
+import { conferenceLocation, getConferenceId } from '../router/navigation'
 
 type PageMode = 'last' | 'all' | 'number'
 type Position = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'center' | 'manual'
 
 const router = useRouter()
+const route = useRoute()
+const confId = computed(() => getConferenceId(route.query))
 const pdfFile = ref<File | null>(null)
 const customSealFile = ref<File | null>(null)
 const previewUrl = ref('')
@@ -185,7 +188,11 @@ onBeforeUnmount(revokePreview)
 <template>
   <div class="seal-page">
     <header class="seal-header">
-      <el-button :icon="ArrowLeft" text @click="router.push('/portal')">我的会议</el-button>
+      <el-button
+        :icon="ArrowLeft"
+        text
+        @click="router.push(confId ? conferenceLocation('Dashboard', confId) : { name: 'Portal' })"
+      >{{ confId ? '返回工作台' : '我的会议' }}</el-button>
       <div class="header-copy">
         <p>IntelliConf / 文档工具</p>
         <h1>电子印章</h1>

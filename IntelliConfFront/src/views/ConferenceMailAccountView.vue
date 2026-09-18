@@ -5,6 +5,7 @@ import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import http from '../utils/http'
+import { conferenceLocation, getConferenceId } from '../router/navigation'
 
 interface MailAccountResp {
   id: number
@@ -25,7 +26,7 @@ interface MailAccountResp {
 const route = useRoute()
 const router = useRouter()
 
-const confShortName = computed(() => String(route.query.confId || ''))
+const confShortName = computed(() => getConferenceId(route.query))
 const conferenceId = ref<number | null>(null)
 const conferenceTitle = ref('')
 
@@ -278,7 +279,7 @@ async function handleTest() {
 }
 
 function handleBack() {
-  router.push(`/dashboard?confId=${encodeURIComponent(confShortName.value)}`)
+  router.push(conferenceLocation('Dashboard', confShortName.value))
 }
 
 onMounted(() => {

@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import http from '../utils/http'
+import { conferenceLocation, getConferenceId } from '../router/navigation'
 
 interface ConferenceInfo {
   id: number
@@ -56,7 +57,7 @@ interface CommitteeSummary {
 const route = useRoute()
 const router = useRouter()
 
-const confShortName = computed(() => String(route.query.confId || ''))
+const confShortName = computed(() => getConferenceId(route.query))
 const sourceTaskId = computed(() => Number(route.query.taskId || 0))
 
 const loading = ref(false)
@@ -190,7 +191,7 @@ function getStatusType(status: string): 'success' | 'warning' | 'danger' | 'info
 }
 
 function goBack() {
-  router.push(`/dashboard?confId=${encodeURIComponent(confShortName.value)}`)
+  router.push(conferenceLocation('Dashboard', confShortName.value))
 }
 
 onMounted(loadPage)

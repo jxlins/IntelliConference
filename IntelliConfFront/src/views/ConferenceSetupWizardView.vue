@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { ArrowLeft, Refresh, Check } from '@element-plus/icons-vue'
 import http from '../utils/http'
+import { conferenceLocation, getConferenceId } from '../router/navigation'
 
 interface StageItem {
   id?: number
@@ -41,7 +42,7 @@ interface TaskItem {
 const route = useRoute()
 const router = useRouter()
 
-const conferenceKey = computed(() => String(route.query.confId || ''))
+const conferenceKey = computed(() => getConferenceId(route.query))
 const loading = ref(false)
 const savingDates = ref(false)
 const previewLoading = ref(false)
@@ -222,7 +223,7 @@ async function confirmGenerateTasks() {
   try {
     await http.post(`/api/conferences/${setupStatus.value.conferenceId}/tasks/generate`)
     ElMessage.success('任务与负责角色已确认')
-    router.push(`/dashboard?confId=${encodeURIComponent(conferenceKey.value)}`)
+    router.push(conferenceLocation('Dashboard', conferenceKey.value))
   } catch (error: any) {
     ElMessage.error(error.response?.data?.message || '确认任务方案失败')
   } finally {
@@ -231,7 +232,7 @@ async function confirmGenerateTasks() {
 }
 
 function goBack() {
-  router.push(`/dashboard?confId=${encodeURIComponent(conferenceKey.value)}`)
+  router.push(conferenceLocation('Dashboard', conferenceKey.value))
 }
 
 onMounted(loadSetupStatus)

@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft, Bell, ChatLineRound, EditPen, MagicStick, Message, Setting, User, UserFilled } from '@element-plus/icons-vue'
 import { ElMessage, type UploadRequestOptions } from 'element-plus'
 import http from '../utils/http'
+import { conferenceLocation } from '../router/navigation'
 
 interface ConferenceInfo {
   id: number
@@ -225,7 +226,7 @@ function applyTaskFilter(filter: TaskFilter) {
 }
 function resetTaskFilters() { applyTaskFilter('ALL') }
 function goMailReview() {
-  router.push({ path: '/mail-workflow', query: { confId: confId.value, filter: 'WAITING_REVIEW' } })
+  router.push(conferenceLocation('MailWorkflow', confId.value, { filter: 'WAITING_REVIEW' }))
 }
 function stageTaskCount(id: number) { return tasks.value.filter(t => t.stageId === id && isOpen(t)).length }
 async function revealCurrentStage() {
@@ -370,7 +371,7 @@ async function loadGeneratedTasks() {
 
 async function openTaskDetail(task: TaskInfo, assignment = false) {
   if (!assignment && task.taskCode === 'CONFIRM_CONFERENCE_COMMITTEE') {
-    router.push(`/conference-committee-init?confId=${encodeURIComponent(confId.value)}&taskId=${task.taskId}`)
+    router.push(conferenceLocation('ConferenceCommitteeInit', confId.value, { taskId: task.taskId }))
     return
   }
   if (!conferenceInfo.value?.id) return
@@ -566,34 +567,34 @@ function selectStage(stageId: number) {
 }
 
 function goSetup() {
-  router.push(`/conference-setup?confId=${encodeURIComponent(confId.value)}`)
+  router.push(conferenceLocation('ConferenceSetup', confId.value))
 }
 
 function goInfo() {
-  router.push(`/conference-info?confId=${encodeURIComponent(confId.value)}`)
+  router.push(conferenceLocation('ConferenceInfo', confId.value))
 }
 
 function goMailAccount() {
-  router.push(`/conference-mail-account?confId=${encodeURIComponent(confId.value)}`)
+  router.push(conferenceLocation('ConferenceMailAccount', confId.value))
 }
 
 function goMailCompose() {
-  router.push(`/mail-compose?confId=${encodeURIComponent(confId.value)}`)
+  router.push(conferenceLocation('MailCompose', confId.value))
 }
 
 function goMailWorkflow() {
-  router.push(`/mail-workflow?confId=${encodeURIComponent(confId.value)}`)
+  router.push(conferenceLocation('MailWorkflow', confId.value))
 }
 
 function openModule(key: string) {
   if (key === 'mail') return goMailWorkflow()
-  if (key === 'discovery') return router.push({ path: '/author-discovery', query: { confId: confId.value } })
+  if (key === 'discovery') return router.push(conferenceLocation('AuthorDiscovery', confId.value))
   if (key === 'people') return goUserManagement()
   document.querySelector('.timeline-panel')?.scrollIntoView({ behavior: 'smooth' })
 }
 
 function goUserManagement() {
-  router.push(`/conference-users?confId=${encodeURIComponent(confId.value)}`)
+  router.push(conferenceLocation('ConferenceUsers', confId.value))
 }
 
 function logout() {
@@ -628,7 +629,7 @@ onBeforeUnmount(() => { clearInterval(clockTimer) })
           <el-button :icon="Setting">更多</el-button>
           <template #dropdown><el-dropdown-menu>
             <el-dropdown-item :icon="EditPen" @click="goInfo">会议信息</el-dropdown-item>
-            <el-dropdown-item :icon="EditPen" @click="router.push('/electronic-seal')">电子印章</el-dropdown-item>
+            <el-dropdown-item :icon="EditPen" @click="router.push(conferenceLocation('ElectronicSeal', confId))">电子印章</el-dropdown-item>
             <el-dropdown-item :icon="Message" @click="goMailAccount">会议邮箱</el-dropdown-item>
             <el-dropdown-item :icon="ChatLineRound" @click="goMailCompose">临时邮件</el-dropdown-item>
             <el-dropdown-item divided :icon="User" @click="logout">退出登录</el-dropdown-item>

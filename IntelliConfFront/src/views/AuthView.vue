@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import axios from 'axios'
 import http from '../utils/http'
+import { conferenceLocation, safeRedirectTarget } from '../router/navigation'
 
 interface InviteTokenInfo {
   conferenceId: number
@@ -112,7 +113,7 @@ async function finishInviteAcceptance() {
   const data = response.data.data as InviteTokenInfo
   ElMessage.success('Invitation accepted successfully')
   if (data?.conferenceShortName) {
-    router.push(`/dashboard?confId=${encodeURIComponent(data.conferenceShortName)}`)
+    router.push(conferenceLocation('Dashboard', data.conferenceShortName))
     return
   }
   router.push('/portal')
@@ -139,7 +140,7 @@ async function handleLogin() {
         return
       }
       ElMessage.success('Login successful')
-      router.push('/portal')
+      await router.replace(safeRedirectTarget(route.query.redirect) || { name: 'Portal' })
     } catch (error: any) {
       ElMessage.error(error.response?.data?.message || error.message || 'Login failed')
     } finally {

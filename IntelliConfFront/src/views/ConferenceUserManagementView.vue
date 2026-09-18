@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft, CircleCheck, EditPen, MagicStick, Message, Plus, Promotion, Refresh, Search, UserFilled } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 import http from '../utils/http'
+import { conferenceLocation, getConferenceId } from '../router/navigation'
 
 interface CommitteeMember {
   confId: number
@@ -83,7 +84,7 @@ interface PotentialAuthor {
 const route = useRoute()
 const router = useRouter()
 
-const confShortName = computed(() => String(route.query.confId || ''))
+const confShortName = computed(() => getConferenceId(route.query))
 const conferenceId = ref<number | null>(null)
 const conferenceTitle = ref('')
 
@@ -498,7 +499,7 @@ async function loadData() {
 }
 
 function handleBack() {
-  router.push(`/dashboard?confId=${encodeURIComponent(confShortName.value)}`)
+  router.push(conferenceLocation('Dashboard', confShortName.value))
 }
 
 function handleSearch() {
@@ -716,7 +717,7 @@ function openAddDialog() {
 }
 
 function openDiscoveryDialog() {
-  router.push({ path: '/author-discovery', query: { confId: confShortName.value } })
+  router.push(conferenceLocation('AuthorDiscovery', confShortName.value))
 }
 function addTopicKeyword() {
   discoveryForm.value.topicKeywords.push('')

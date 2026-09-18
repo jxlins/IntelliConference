@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import http from '../utils/http'
+import { conferenceLocation, getConferenceId } from '../router/navigation'
 
 interface Participant {
   id: string | number
@@ -32,7 +33,7 @@ interface MailTemplate {
 const route = useRoute()
 const router = useRouter()
 
-const confShortName = computed(() => String(route.query.confId || ''))
+const confShortName = computed(() => getConferenceId(route.query))
 const conferenceTitle = ref('')
 const conferenceId = ref<number | null>(null)
 
@@ -242,7 +243,7 @@ function handleSelectionChange(rows: Participant[]) {
 }
 
 function handleBack() {
-  router.push(`/dashboard?confId=${encodeURIComponent(confShortName.value)}`)
+  router.push(conferenceLocation('Dashboard', confShortName.value))
 }
 
 async function handleSend() {

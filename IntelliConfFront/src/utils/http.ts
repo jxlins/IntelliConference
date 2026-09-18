@@ -60,9 +60,10 @@ http.interceptors.response.use(
         // 邀请确认场景必须保留邀请令牌，登录/注册后才能继续完成接受操作。
         const currentUrl = new URL(window.location.href)
         const inviteToken = currentUrl.pathname === '/committee-invite' ? currentUrl.searchParams.get('token') : ''
+        const returnTo = `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`
         window.location.href = inviteToken
           ? `/auth?token=${encodeURIComponent(inviteToken)}&mode=accept`
-          : '/auth'
+          : `/auth?redirect=${encodeURIComponent(returnTo)}`
       }
     }
     return Promise.reject(error)
