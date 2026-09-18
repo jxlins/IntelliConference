@@ -1,0 +1,24 @@
+[Unit]
+Description=Back up the IntelliConference MariaDB database
+After=mariadb.service
+Requires=mariadb.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/intelliconf/shared/bin/intelliconf-db-backup.sh
+Environment=INTELLICONF_DB_NAME=intelliconf
+Environment=BACKUP_ROOT=/opt/intelliconf/backups/database
+Environment=RETENTION_DAYS=30
+User=root
+Group=root
+UMask=0077
+Nice=10
+IOSchedulingClass=idle
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/opt/intelliconf/backups/database /run/lock
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the IntelliConference database backup every day
+
+[Timer]
+OnCalendar=*-*-* 04:20:00
+RandomizedDelaySec=15m
+Persistent=true
+Unit=intelliconf-db-backup.service
+
+[Install]
+WantedBy=timers.target

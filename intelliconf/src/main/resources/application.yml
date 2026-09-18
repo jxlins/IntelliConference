@@ -15,16 +15,16 @@ spring:
       max-request-size: 30MB
 
   datasource:
-    username: conference_user
-    password: Conference@2026
-    url: jdbc:mysql://114.215.211.204:3306/intelliconf?characterEncoding=utf-8&zeroDataTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8
+    username: ${SPRING_DATASOURCE_USERNAME:conference_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://127.0.0.1:3306/intelliconf?characterEncoding=utf-8&zeroDataTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   data:
     redis:
-      host: 114.215.211.204
-      port: 6379
-      password: Jiangxiaolin-0216
+      host: ${SPRING_DATA_REDIS_HOST:127.0.0.1}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      password: ${SPRING_DATA_REDIS_PASSWORD:}
 
 # Mail accounts are stored per conference in conference_mail_account.
 # Do not configure a global spring.mail sender here.

@@ -2,8 +2,8 @@
 -- 使用阶段内相对日期，会议关键日期调整后可重新生成计划而无需修改模板。
 
 UPDATE conf_task_def
-SET default_role = 'SECRETARY', default_assignee_role = 'SECRETARY'
-WHERE default_role = 'SECRETARIAT' OR default_assignee_role = 'SECRETARIAT';
+SET default_role = 'SECRETARY'
+WHERE default_role = 'SECRETARIAT';
 
 UPDATE conf_task
 SET principal_role = 'SECRETARY'
@@ -12,10 +12,10 @@ WHERE principal_role = 'SECRETARIAT';
 INSERT INTO conf_task_def
     (stage_def_id, task_code, task_name, task_desc, task_type, default_role, completion_type,
      sort_order, offset_base, start_offset_days, end_offset_days, is_core, need_review, status,
-     create_time, update_time, created_at, updated_at)
+     create_time, update_time)
 SELECT s.id, v.task_code, v.task_name, v.task_desc, v.task_type, v.default_role, v.completion_type,
        v.sort_order, v.offset_base, v.start_offset_days, v.end_offset_days, v.is_core, v.need_review, 1,
-       NOW(), NOW(), NOW(), NOW()
+       NOW(), NOW()
 FROM conf_stage_def s
 JOIN (
     SELECT 'DEFINE_REVIEW_POLICY' task_code, '确认评审规则与评分标准' task_name, '确认评审轮次、评分维度、利益冲突和录用规则' task_desc, 'RULE_CONFIG' task_type, 'PROGRAM_CHAIR' default_role, 'MANUAL_CONFIRM' completion_type, 10 sort_order, 'STAGE_START_TIME' offset_base, 0 start_offset_days, 2 end_offset_days, 1 is_core, 1 need_review
@@ -36,15 +36,15 @@ ON DUPLICATE KEY UPDATE
     task_name=VALUES(task_name), task_desc=VALUES(task_desc), task_type=VALUES(task_type),
     default_role=VALUES(default_role), completion_type=VALUES(completion_type), sort_order=VALUES(sort_order),
     offset_base=VALUES(offset_base), start_offset_days=VALUES(start_offset_days), end_offset_days=VALUES(end_offset_days),
-    is_core=VALUES(is_core), need_review=VALUES(need_review), status=1, update_time=NOW(), updated_at=NOW();
+    is_core=VALUES(is_core), need_review=VALUES(need_review), status=1, update_time=NOW();
 
 INSERT INTO conf_task_def
     (stage_def_id, task_code, task_name, task_desc, task_type, default_role, completion_type,
      sort_order, offset_base, start_offset_days, end_offset_days, is_core, need_review, status,
-     create_time, update_time, created_at, updated_at)
+     create_time, update_time)
 SELECT s.id, v.task_code, v.task_name, v.task_desc, v.task_type, v.default_role, v.completion_type,
        v.sort_order, v.offset_base, v.start_offset_days, v.end_offset_days, v.is_core, v.need_review, 1,
-       NOW(), NOW(), NOW(), NOW()
+       NOW(), NOW()
 FROM conf_stage_def s
 JOIN (
     SELECT 'OPEN_REGISTRATION' task_code, '开放作者注册通道' task_name, '配置注册类别、费用、支付和发票规则' task_desc, 'SYSTEM_CONFIG' task_type, 'REGISTRATION_CHAIR' default_role, 'MANUAL_CONFIRM' completion_type, 10 sort_order, 'STAGE_START_TIME' offset_base, 0 start_offset_days, 2 end_offset_days, 1 is_core, 1 need_review
@@ -63,15 +63,15 @@ ON DUPLICATE KEY UPDATE
     task_name=VALUES(task_name), task_desc=VALUES(task_desc), task_type=VALUES(task_type),
     default_role=VALUES(default_role), completion_type=VALUES(completion_type), sort_order=VALUES(sort_order),
     offset_base=VALUES(offset_base), start_offset_days=VALUES(start_offset_days), end_offset_days=VALUES(end_offset_days),
-    is_core=VALUES(is_core), need_review=VALUES(need_review), status=1, update_time=NOW(), updated_at=NOW();
+    is_core=VALUES(is_core), need_review=VALUES(need_review), status=1, update_time=NOW();
 
 INSERT INTO conf_task_def
     (stage_def_id, task_code, task_name, task_desc, task_type, default_role, completion_type,
      sort_order, offset_base, start_offset_days, end_offset_days, is_core, need_review, status,
-     create_time, update_time, created_at, updated_at)
+     create_time, update_time)
 SELECT s.id, v.task_code, v.task_name, v.task_desc, v.task_type, v.default_role, v.completion_type,
        v.sort_order, v.offset_base, v.start_offset_days, v.end_offset_days, v.is_core, v.need_review, 1,
-       NOW(), NOW(), NOW(), NOW()
+       NOW(), NOW()
 FROM conf_stage_def s
 JOIN (
     SELECT 'DESIGN_CONFERENCE_PROGRAM' task_code, '设计会议议程框架' task_name, '确定分会场、主题论坛和时间分配' task_desc, 'PROGRAM' task_type, 'PROGRAM_CHAIR' default_role, 'MANUAL_CONFIRM' completion_type, 10 sort_order, 'STAGE_START_TIME' offset_base, 0 start_offset_days, 14 end_offset_days, 1 is_core, 1 need_review
@@ -91,15 +91,15 @@ ON DUPLICATE KEY UPDATE
     task_name=VALUES(task_name), task_desc=VALUES(task_desc), task_type=VALUES(task_type),
     default_role=VALUES(default_role), completion_type=VALUES(completion_type), sort_order=VALUES(sort_order),
     offset_base=VALUES(offset_base), start_offset_days=VALUES(start_offset_days), end_offset_days=VALUES(end_offset_days),
-    is_core=VALUES(is_core), need_review=VALUES(need_review), status=1, update_time=NOW(), updated_at=NOW();
+    is_core=VALUES(is_core), need_review=VALUES(need_review), status=1, update_time=NOW();
 
 INSERT INTO conf_task_def
     (stage_def_id, task_code, task_name, task_desc, task_type, default_role, completion_type,
      sort_order, offset_base, start_offset_days, end_offset_days, is_core, need_review, status,
-     create_time, update_time, created_at, updated_at)
+     create_time, update_time)
 SELECT s.id, v.task_code, v.task_name, v.task_desc, v.task_type, v.default_role, v.completion_type,
        v.sort_order, v.offset_base, v.start_offset_days, v.end_offset_days, v.is_core, v.need_review, 1,
-       NOW(), NOW(), NOW(), NOW()
+       NOW(), NOW()
 FROM conf_stage_def s
 JOIN (
     SELECT 'OPEN_ONSITE_REGISTRATION' task_code, '开放现场签到' task_name, '启用签到台并处理现场注册问题' task_desc, 'ONSITE' task_type, 'REGISTRATION_CHAIR' default_role, 'MANUAL_CONFIRM' completion_type, 10 sort_order, 'STAGE_START_TIME' offset_base, 0 start_offset_days, 0 end_offset_days, 1 is_core, 0 need_review
@@ -115,15 +115,15 @@ ON DUPLICATE KEY UPDATE
     task_name=VALUES(task_name), task_desc=VALUES(task_desc), task_type=VALUES(task_type),
     default_role=VALUES(default_role), completion_type=VALUES(completion_type), sort_order=VALUES(sort_order),
     offset_base=VALUES(offset_base), start_offset_days=VALUES(start_offset_days), end_offset_days=VALUES(end_offset_days),
-    is_core=VALUES(is_core), need_review=VALUES(need_review), status=1, update_time=NOW(), updated_at=NOW();
+    is_core=VALUES(is_core), need_review=VALUES(need_review), status=1, update_time=NOW();
 
 INSERT INTO conf_task_def
     (stage_def_id, task_code, task_name, task_desc, task_type, default_role, completion_type,
      sort_order, offset_base, start_offset_days, end_offset_days, is_core, need_review, status,
-     create_time, update_time, created_at, updated_at)
+     create_time, update_time)
 SELECT s.id, v.task_code, v.task_name, v.task_desc, v.task_type, v.default_role, v.completion_type,
        v.sort_order, v.offset_base, v.start_offset_days, v.end_offset_days, v.is_core, v.need_review, 1,
-       NOW(), NOW(), NOW(), NOW()
+       NOW(), NOW()
 FROM conf_stage_def s
 JOIN (
     SELECT 'SEND_THANK_YOU_EMAILS' task_code, '发送会后感谢邮件' task_name, '向参会者、嘉宾、委员和志愿者发送感谢邮件' task_desc, 'EMAIL' task_type, 'SECRETARY' default_role, 'MANUAL_CONFIRM' completion_type, 10 sort_order, 'STAGE_START_TIME' offset_base, 0 start_offset_days, 3 end_offset_days, 0 is_core, 1 need_review
@@ -141,7 +141,7 @@ ON DUPLICATE KEY UPDATE
     task_name=VALUES(task_name), task_desc=VALUES(task_desc), task_type=VALUES(task_type),
     default_role=VALUES(default_role), completion_type=VALUES(completion_type), sort_order=VALUES(sort_order),
     offset_base=VALUES(offset_base), start_offset_days=VALUES(start_offset_days), end_offset_days=VALUES(end_offset_days),
-    is_core=VALUES(is_core), need_review=VALUES(need_review), status=1, update_time=NOW(), updated_at=NOW();
+    is_core=VALUES(is_core), need_review=VALUES(need_review), status=1, update_time=NOW();
 
 -- 所有模板就绪后再次执行幂等补齐，覆盖后续五个阶段。
 INSERT INTO conf_task
@@ -157,7 +157,7 @@ SELECT q.conference_id, q.stage_id, q.task_def_id, q.stage_code, q.task_code, q.
 FROM (
     SELECT c.id conference_id, si.id stage_id, d.id task_def_id, sd.stage_code, d.task_code,
            d.task_name, d.task_desc, d.task_type,
-           COALESCE(NULLIF(d.default_role, ''), d.default_assignee_role, 'GENERAL_CHAIR') principal_role,
+           COALESCE(NULLIF(d.default_role, ''), 'GENERAL_CHAIR') principal_role,
            CASE WHEN d.start_offset_days IS NULL THEN si.planned_start_time ELSE DATE_ADD(
                COALESCE(CASE d.offset_base
                    WHEN 'CONFERENCE_CREATE_TIME' THEN c.create_time

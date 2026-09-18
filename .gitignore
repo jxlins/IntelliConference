@@ -25,3 +25,9 @@ intelliconf/uploads/
 # Temporary local copies/archives
 backend/
 backend.zip
+
+# Deployment runtime state and generated artifacts
+deploy/.env
+deploy/app/
+deploy/frontend/
+deploy/data/

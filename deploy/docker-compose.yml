@@ -1,0 +1,101 @@
+services:
+  db:
+    image: mariadb:11.4
+    container_name: intelliconf-db
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: intelliconf
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --innodb-buffer-pool-size=128M
+      - --max-connections=50
+      - --performance-schema=OFF
+      - --skip-name-resolve
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./init/00_schema.sql:/docker-entrypoint-initdb.d/00_schema.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 40s
+    mem_limit: 420m
+
+  redis:
+    image: redis:8-alpine
+    container_name: intelliconf-redis
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      TZ: Asia/Shanghai
+    command:
+      - sh
+      - -c
+      - exec redis-server --appendonly yes --requirepass "$${REDIS_PASSWORD}" --maxmemory 96mb --maxmemory-policy allkeys-lru
+    volumes:
+      - ./data/redis:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD}\" ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    mem_limit: 140m
+
+  backend:
+    image: eclipse-temurin:17-jre-alpine
+    container_name: intelliconf-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    working_dir: /app
+    command: ["java", "-jar", "/app/app.jar"]
+    environment:
+      TZ: Asia/Shanghai
+      SERVER_PORT: "8080"
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/intelliconf?characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: "6379"
+      SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD}
+      INTELLICONF_WEB_BASE_URL: http://118.31.220.169:18080
+      DEEPSEEK_ENABLED: "false"
+      JAVA_TOOL_OPTIONS: -Xms96m -Xmx384m -XX:MaxMetaspaceSize=160m -XX:+UseSerialGC -Dfile.encoding=UTF-8
+    volumes:
+      - ./app/app.jar:/app/app.jar:ro
+      - ./data/uploads:/app/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+    mem_limit: 620m
+
+  gateway:
+    image: nginx:alpine
+    container_name: intelliconf-gateway
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "18080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./frontend:/usr/share/nginx/html:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ >/dev/null"]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+    mem_limit: 64m
